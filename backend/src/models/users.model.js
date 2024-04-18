@@ -1,6 +1,7 @@
-import {Schema,model} from 'mongose';
+import {Schema,model} from "mongoose";
 
-const UserSchema = new Schema ({
+//Schema del Producto
+const userSchema = new Schema ({
     nombre_completo:{
         required:true,
         type:String,
@@ -55,4 +56,4 @@ const UserSchema = new Schema ({
     }
 })
 //Defno cómo se va a llamar mi modelo y el esquema
-export const userModel = model('users', UserSchema)
+export const userModel = model('users', userSchema)
