@@ -1,31 +1,22 @@
-import { useState } from 'react';
-import axios from 'axios';
+import {useRef } from 'react';
 
 export const Form = ()=>{
-    const [formData,setFormData] = useState({
-    nombre_completo:"",
-    edad:"",
-    dni: "",
-    nivel_experiencia:"",
-    tiempo_entrenamiento:"",
-    frecuencia_entrenamiento:"",
-    turno_entrenamiento:"",
-    eleccion_profesor:"",
-    lesiones:"",
-    descripcion_lesion:"",
-    objetivo:"",
-    enfoque:"",
-    competencia_deportiva:""
-    })
+    const formRef = useRef(null)//Guarda una referencia del formulario
     
-    const handleChange = (e)=>{
-        setFormData({...formData,[e.target.name]: e.target.value })
-    }
     const handleSubmit = async(e)=>{
         e.preventDefault();
+        const datForm = new FormData(formRef.current)//Transforma un html en un objetivo iterable
+        const data = Object.fromEntries(datForm)//Dado un objeto iterador lo transforma en un objeto simple
+        console.log(data)
         try {
-            const response = await axios.post('http://localhost:4000/enviarFormulario')
-            console.log("Formulario enviado correctamente:", response.data);
+            const response = await fetch('http://localhost:4000/enviarFormulario',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json',
+                },
+                body:JSON.stringify(data)
+            })
+            console.log("Formulario enviado correctamente:", response);
         } catch (error) {
             console.log("Error al enviar el formulario", error);
         }
@@ -33,86 +24,63 @@ export const Form = ()=>{
 
     
     return(
-        <div>
+        <div className='row'>
             <h1>FORMULARIO</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
+            <form onSubmit={handleSubmit} ref={formRef}>
+                <div className='mb-3'>
                     <label htmlFor="nombre_completo">Nombre y Apellido</label>
-                    <input type="text" id="name" name="nombre_completo" 
-                    value={formData.nombre_completo} 
-                    onChange={handleChange} required />
+                    <input type="text" id="name" name="nombre_completo" />
                 </div>
-                <div>
+                <div className='mb-3'>
                     <label htmlFor="edad">Edad</label>
-                    <input type="number" id="edad" name="edad" value={formData.edad} 
-                    onChange={handleChange} required />
+                    <input type="number" id="edad" name="edad" />
                 </div>
-                <div>
+                <div className='mb-3'>
                     <label htmlFor="dni">DNI</label>
                     <input type="number" id="dni"
-                     name="dni" value={formData.dni} onChange={handleChange} required />
+                     name="dni"/>
                 </div>     
-                <div>
+                <div className='mb-3'>
                     <label htmlFor="nivel_experiencia">Nivel de Experiencia</label>
-                    <input type="text" id="nivel_experiencia" name="nivel_experiencia" 
-                    value={formData.nivel_experiencia} 
-                    onChange={handleChange} required />
+                    <input type="text" id="nivel_experiencia" name="nivel_experiencia"/>
                 </div>
-                <div>
+                <div className='mb-3'>
                     <label htmlFor="tiempo_entrenamiento">Nivel de entrenamiento</label>
-                    <input type="text" id="tiempo_entrenamiento" name="tiempo_entrenamiento" 
-                    value={formData.tiempo_entrenamiento} 
-                    onChange={handleChange} required />
+                    <input type="text" id="tiempo_entrenamiento" name="tiempo_entrenamiento"/>
                 </div>
-                <div>
+                <div className='mb-3'>
                     <label htmlFor="frecuencia_entrenamiento">Frecuencia de entrenamiento</label>
-                    <input type="text" id="frecuencia_entrenamiento" name="frecuencia_entrenamiento" 
-                    value={formData.frecuencia_entrenamiento} 
-                    onChange={handleChange} required />
+                    <input type="text" id="frecuencia_entrenamiento" name="frecuencia_entrenamiento"/>
                 </div>
-                <div>
+                <div className='mb-3'>
                     <label htmlFor="turno_entrenamiento">Turno de entrenamiento</label>
-                    <input type="text" id="turno_entrenamiento" name="turno_entrenamiento" 
-                    value={formData.turno_entrenamiento} 
-                    onChange={handleChange} required />
+                    <input type="text" id="turno_entrenamiento" name="turno_entrenamiento"/>
                 </div>
-                <div>
+                <div className='mb-3'>
                     <label htmlFor="lesiones">Lesiones</label>
-                    <input type="text" id="lesiones" name="lesiones" 
-                    value={formData.lesiones} 
-                    onChange={handleChange} required />
+                    <input type="text" id="lesiones" name="lesiones"/>
                 </div>
-                <div>    
+                <div className='mb-3'>    
                     <label htmlFor="descripcion_lesion">Descripcion de lesion</label>
-                    <input type="text" id="descripcion_lesion" name="descripcion_lesion" 
-                    value={formData.descripcion_lesion} 
-                    onChange={handleChange} required/>
+                    <input type="text" id="descripcion_lesion" name="descripcion_lesion"/>
                 </div> 
-                <div>   
+                <div className='mb-3'>   
                     <label htmlFor="objetivo">Objetivo</label>
-                    <input type="text" id="objetivo" name="objetivo" 
-                    value={formData.objetivo} 
-                    onChange={handleChange} required/>
+                    <input type="text" id="objetivo" name="objetivo"/>
                 </div> 
-                <div>   
+                <div className='mb-3'>   
                     <label htmlFor="enfoque">Enfoque</label>
-                    <input type="text" id="enfoque" name="enfoque" 
-                    value={formData.enfoque} 
-                    onChange={handleChange} required/>
+                    <input type="text" id="enfoque" name="enfoque"/>
                 </div>
-                <div>    
+                <div className='mb-3'>    
                     <label htmlFor="competencia_deportiva">Competencia deportiva</label>
-                    <input type="text" id="competencia_deportiva" name="competencia_deportiva" 
-                    value={formData.competencia_deportiva} 
-                    onChange={handleChange} required/>
+                    <input type="text" id="competencia_deportiva" name="competencia_deportiva"/>
                 </div> 
-                <div>   
+                <div className='mb-3'>   
                     <label htmlFor="eleccion_profesor">Eleccion de profesor</label>
-                    <input type="text" id="eleccion_profesor" name="eleccion_profesor" 
-                    value={formData.eleccion_profesor} 
-                    onChange={handleChange} required/>
+                    <input type="text" id="eleccion_profesor" name="eleccion_profesor"/>
                 </div>
-                <button type="submit">Enviar</button>
+                <button type="submit"  className='btn btn-dark'>Enviar</button>
             </form>
         </div>
     )

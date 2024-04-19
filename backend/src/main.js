@@ -11,6 +11,19 @@ const app = express()
 //Inicio mi servidor MongoDB
 mongoConnect();
 
+const whiteList = ['http://localhost:5173']
+
+const corsOptions = {
+    origin: function(origin,callback){
+        if(whiteList.indexOf(origin) != -1 || !origin) //Existe dentro de la whiteList
+        {
+            callback(null,true)
+        }else {
+            callback(new Error("Acceso denegado"))
+        }
+    }
+}
+
 //Server
 const server = app.listen(PORT,()=>{
     console.log("SV CONECTADO CORRECTAMENTE", PORT)
@@ -19,12 +32,13 @@ const server = app.listen(PORT,()=>{
 //Se ubica acá arriba apropósito porque Socket io necesita saber la configuración de los servidores
 const io = new Server(server);  //Inicio el server WebSocket
 
-
 //Middlewares
 app.use(express.urlencoded({extended:true})); //Se utiliza para optimizar la búsqueda en las rutas
 app.use(express.json()); //Se utiliza para que mis rutas puedan leer archivos json
-app.use(cors())
-app.use(morgan('dev'))
+app.use(morgan('dev'));
+app.use(cors(corsOptions));
+
+//Rutas
 app.use('/prueba',(req,res)=>{
     res.send("Conectado RIGHT NOW")
 })
